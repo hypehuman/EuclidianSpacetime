@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 
 namespace EuclidianSpacetime
 {
@@ -7,15 +8,12 @@ namespace EuclidianSpacetime
         int N { get; }
     }
 
-    internal interface ISpacetimeInternal : ISpacetime
-    {
-    }
-
-    internal class Spacetime : ISpacetimeInternal
+    internal class Spacetime : ISpacetime
     {
         public int N { get; }
+        public Vector<double> TimeArrow { get; }
 
-        public Spacetime(int n)
+        public Spacetime(int n, Vector<double> timeArrowAnyLength = null)
         {
             if (n != 2 && n != 3 && n != 4)
             {
@@ -23,6 +21,22 @@ namespace EuclidianSpacetime
             }
 
             N = n;
+
+            if (timeArrowAnyLength == null)
+            {
+                var timeArrow = Vector<double>.Build.Dense(N);
+                timeArrow[N - 1] = 1;
+                TimeArrow = timeArrow;
+            }
+            else
+            {
+                if (timeArrowAnyLength.Count != N)
+                {
+                    throw new ArgumentException("Time arrow length must be N", nameof(timeArrowAnyLength));
+                }
+
+                TimeArrow = timeArrowAnyLength / timeArrowAnyLength.L2Norm();
+            }
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public static class SpacetimeProvider
     {
-        public static ISpacetime NewSpacetime(int n) => new Spacetime(n);
+        public static ISpacetime NewSpacetime(int n, int c) => new Spacetime(n, c);
     }
 }

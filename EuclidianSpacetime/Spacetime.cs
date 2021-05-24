@@ -1,19 +1,29 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using EuclidianSpacetime.Entities;
+using MathNet.Numerics.LinearAlgebra;
 using System;
+using System.Collections.Generic;
 
 namespace EuclidianSpacetime
 {
     public interface ISpacetime
     {
-        int N { get; }
     }
 
     internal class Spacetime : ISpacetime
     {
-        public int N { get; }
-        public Vector<double> TimeArrow { get; }
+        /// <summary>
+        /// The number of dimensions, including time
+        /// </summary>
+        int N { get; }
 
-        public Spacetime(int n, Vector<double> timeArrowAnyLength = null)
+        /// <summary>
+        /// The conversion factor from time to length. Specifically, the number of linear spacial units per second.
+        /// </summary>
+        int C { get; }
+
+        public IEnumerable<IEntity> Entities { get; }
+
+        public Spacetime(int n, int c)
         {
             if (n != 2 && n != 3 && n != 4)
             {
@@ -21,22 +31,45 @@ namespace EuclidianSpacetime
             }
 
             N = n;
+            C = c;
+        }
 
+        /// <summary>
+        /// Returns a snapshot of space at the given time.
+        /// </summary>
+        /// <param name="t">The time</param>
+        /// <param name="timeArrow">A unit vector that defines the direction of the arrow of time.</param>
+        /// <returns>A space with one less dimension than the current spacetime.</returns>
+        ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null)
+        {
+            var timeArrow = ValidateTimeArrow(timeArrowAnyLength);
+            throw new NotImplementedException();
+        }
+
+        Vector<double> ValidateTimeArrow(Vector<double> timeArrowAnyLength)
+        {
             if (timeArrowAnyLength == null)
             {
-                var timeArrow = Vector<double>.Build.Dense(N);
-                timeArrow[N - 1] = 1;
-                TimeArrow = timeArrow;
+                return GetDefaultTimeArrow();
             }
             else
             {
                 if (timeArrowAnyLength.Count != N)
                 {
-                    throw new ArgumentException("Time arrow length must be N", nameof(timeArrowAnyLength));
+                    throw new ArgumentException($"Time arrow length must be {nameof(N)}", nameof(timeArrowAnyLength));
                 }
 
-                TimeArrow = timeArrowAnyLength / timeArrowAnyLength.L2Norm();
+                var length = timeArrowAnyLength.L2Norm();
+                var timeArrow = timeArrowAnyLength / length;
+                return timeArrow;
             }
+        }
+
+        Vector<double> GetDefaultTimeArrow()
+        {
+            var timeArrow = Vector<double>.Build.Dense(N);
+            timeArrow[N - 1] = 1;
+            return timeArrow;
         }
     }
 }

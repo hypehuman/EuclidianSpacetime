@@ -7,7 +7,7 @@ namespace EuclidianSpacetimeConsole
     {
         static void Main(string[] args)
         {
-            var st = SpacetimeProvider.NewSpacetime(3);
+            var st = SpacetimeProvider.NewSpacetime(3, 1);
             Console.WriteLine($"Spacetime: {st}");
         }
     }

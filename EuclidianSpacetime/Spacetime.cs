@@ -7,6 +7,7 @@ namespace EuclidianSpacetime
 {
     public interface ISpacetime
     {
+        public void Add(IEntity Entity);
     }
 
     internal class Spacetime : ISpacetime
@@ -21,7 +22,7 @@ namespace EuclidianSpacetime
         /// </summary>
         int C { get; }
 
-        public IEnumerable<IEntity> Entities { get; }
+        List<IEntity> Entities { get; } = new List<IEntity>();
 
         public Spacetime(int n, int c)
         {
@@ -70,6 +71,11 @@ namespace EuclidianSpacetime
             var timeArrow = Vector<double>.Build.Dense(N);
             timeArrow[N - 1] = 1;
             return timeArrow;
+        }
+
+        public void Add(IEntity entity)
+        {
+            Entities.Add(entity);
         }
     }
 }

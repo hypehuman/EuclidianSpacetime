@@ -16,7 +16,7 @@ namespace EuclidianSpacetime
         /// <param name="t">The time</param>
         /// <param name="timeArrowAnyLength">A unit vector that defines the direction of the arrow of time.</param>
         /// <returns>A space with one less dimension than the current spacetime.</returns>
-        ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null);
+        ISpace TakeCrossSection(double t, Vector<double>? timeArrowAnyLength = null);
     }
 
     public class Spacetime : ISpacetime
@@ -44,7 +44,7 @@ namespace EuclidianSpacetime
             C = c;
         }
 
-        public ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null)
+        public ISpace TakeCrossSection(double t, Vector<double>? timeArrowAnyLength = null)
         {
             var timeArrow = ValidateTimeArrow(timeArrowAnyLength);
             var crossSections = Entities.SelectMany(e => e.TakeCrossSection(t, timeArrow)).ToList();
@@ -52,7 +52,7 @@ namespace EuclidianSpacetime
             return space;
         }
 
-        Vector<double> ValidateTimeArrow(Vector<double> timeArrowAnyLength)
+        Vector<double> ValidateTimeArrow(Vector<double>? timeArrowAnyLength)
         {
             if (timeArrowAnyLength == null)
             {

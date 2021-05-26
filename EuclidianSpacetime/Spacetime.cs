@@ -14,7 +14,7 @@ namespace EuclidianSpacetime
         /// Returns a snapshot of space at the given time.
         /// </summary>
         /// <param name="t">The time</param>
-        /// <param name="timeArrowAnyLength">A unit vector that defines the direction of the arrow of time.</param>
+        /// <param name="timeArrowAnyLength">A vector that defines the direction of the arrow of time.</param>
         /// <returns>A space with one less dimension than the current spacetime.</returns>
         ISpace TakeCrossSection(double t, Vector<double>? timeArrowAnyLength = null);
     }

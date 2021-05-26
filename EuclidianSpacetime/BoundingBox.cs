@@ -2,9 +2,15 @@
 
 namespace EuclidianSpacetime
 {
-    public interface IBoundingBox
+    public struct BoundingBox
     {
-        Vector<double> Min { get; }
-        Vector<double> Max { get; }
+        public Vector<double> Min { get; }
+        public Vector<double> Max { get; }
+
+        public BoundingBox(Vector<double> min, Vector<double> max) : this()
+        {
+            Min = min;
+            Max = max;
+        }
     }
 }

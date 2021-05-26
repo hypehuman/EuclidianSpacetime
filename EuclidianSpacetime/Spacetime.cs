@@ -2,15 +2,24 @@
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EuclidianSpacetime
 {
     public interface ISpacetime
     {
-        public void Add(IEntity Entity);
+        public void AddEntity(IEntity Entity);
+
+        /// <summary>
+        /// Returns a snapshot of space at the given time.
+        /// </summary>
+        /// <param name="t">The time</param>
+        /// <param name="timeArrowAnyLength">A unit vector that defines the direction of the arrow of time.</param>
+        /// <returns>A space with one less dimension than the current spacetime.</returns>
+        ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null);
     }
 
-    internal class Spacetime : ISpacetime
+    public class Spacetime : ISpacetime
     {
         /// <summary>
         /// The number of dimensions, including time
@@ -35,16 +44,12 @@ namespace EuclidianSpacetime
             C = c;
         }
 
-        /// <summary>
-        /// Returns a snapshot of space at the given time.
-        /// </summary>
-        /// <param name="t">The time</param>
-        /// <param name="timeArrow">A unit vector that defines the direction of the arrow of time.</param>
-        /// <returns>A space with one less dimension than the current spacetime.</returns>
-        ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null)
+        public ISpace TakeCrossSection(double t, Vector<double> timeArrowAnyLength = null)
         {
             var timeArrow = ValidateTimeArrow(timeArrowAnyLength);
-            throw new NotImplementedException();
+            var crossSections = Entities.SelectMany(e => e.TakeCrossSection(t, timeArrow)).ToList();
+            ISpace space = new Space(N - 1, crossSections);
+            return space;
         }
 
         Vector<double> ValidateTimeArrow(Vector<double> timeArrowAnyLength)
@@ -73,7 +78,7 @@ namespace EuclidianSpacetime
             return timeArrow;
         }
 
-        public void Add(IEntity entity)
+        public void AddEntity(IEntity entity)
         {
             Entities.Add(entity);
         }

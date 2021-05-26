@@ -1,11 +1,12 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using System.Collections.Generic;
 
 namespace EuclidianSpacetime.Entities
 {
     public interface IEntity
     {
         IRayIntersection GetIntersection(IRay ray);
-        Vector<double> GetBoundingBox();
-        IEntity TakeCrossSection();
+        BoundingBox ComputeBoundingBox();
+        IEnumerable<IEntity> TakeCrossSection(double t, Vector<double> timeArrow);
     }
 }

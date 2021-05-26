@@ -1,5 +1,8 @@
 ﻿using EuclidianSpacetime.Textures;
 using MathNet.Numerics.LinearAlgebra;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EuclidianSpacetime.Entities
 {
@@ -22,19 +25,21 @@ namespace EuclidianSpacetime.Entities
             Texture = texture;
         }
 
-        public Vector<double> GetBoundingBox()
+        public BoundingBox ComputeBoundingBox()
         {
-            throw new System.NotImplementedException();
+            var min = A.Zip(B, Math.Min).ToVectorDD();
+            var max = A.Zip(B, Math.Max).ToVectorDD();
+            return new BoundingBox(min, max);
         }
 
         public IRayIntersection GetIntersection(IRay ray)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public IEntity TakeCrossSection()
+        IEnumerable<IEntity> IEntity.TakeCrossSection(double t, Vector<double> timeArrow)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException("Return a single point if the slice intersects, otherwise an empty set.");
         }
     }
 }

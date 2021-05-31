@@ -5,17 +5,25 @@ namespace EuclidianSpacetime
 {
     public interface ISpace
     {
+        IReadOnlyList<IEntity> Entities { get; }
+        public void AddEntity(IEntity Entity);
     }
 
-    internal class Space : ISpace
+    public class Space : ISpace
     {
+        private readonly List<IEntity> _entities = new();
         public int N { get; }
-        public IEnumerable<IEntity> Entities { get; }
 
-        public Space(int n, IEnumerable<IEntity> entities)
+        public Space(int n)
         {
             N = n;
-            Entities = entities;
+        }
+
+        public IReadOnlyList<IEntity> Entities => _entities;
+
+        public void AddEntity(IEntity entity)
+        {
+            _entities.Add(entity);
         }
     }
 }

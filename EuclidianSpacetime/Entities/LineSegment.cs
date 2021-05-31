@@ -32,12 +32,12 @@ namespace EuclidianSpacetime.Entities
             return new BoundingBox(min, max);
         }
 
-        public IRayIntersection GetIntersection(IRay ray)
+        public IRayIntersection ComputeIntersection(IRay ray)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<IEntity> IEntity.TakeCrossSection(double t, Vector<double> timeArrow)
+        public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)
         {
             throw new NotImplementedException("Return a single point if the slice intersects, otherwise an empty set.");
         }

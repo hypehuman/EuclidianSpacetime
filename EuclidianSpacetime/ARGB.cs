@@ -2,6 +2,8 @@
 {
     public struct ARGB
     {
+        public static ARGB TransparentBlack => default;
+
         public byte A { get; }
         public byte R { get; }
         public byte G { get; }

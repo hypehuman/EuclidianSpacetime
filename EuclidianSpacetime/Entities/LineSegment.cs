@@ -32,14 +32,40 @@ namespace EuclidianSpacetime.Entities
             return new BoundingBox(min, max);
         }
 
-        public IRayIntersection ComputeIntersection(IRay ray)
+        public Vector<double>? ComputeIntersection(ISightRay ray)
         {
-            throw new NotImplementedException();
+            switch (A.Count)
+            {
+                case 1:
+                    var segA = A[0];
+                    var segB = B[0];
+                    var rayA = ray.A[0];
+                    if (segA <= rayA && rayA <= segB || segB <= rayA && rayA <= segA)
+                    {
+                        // ray starts inside the line segment
+                        return ray.A;
+                    }
+                    var raySign = ray.ABUnit[0];
+                    var distanceToA = raySign * (segA - rayA);
+                    if (distanceToA < 0)
+                    {
+                        // ray points away from segment
+                        return null;
+                    }
+                    // ray points toward segment; return whichever side is closer
+                    var distanceToB = raySign * (segB - rayA);
+                    return distanceToA < distanceToB ? A : B;
+                case 2:
+                    throw new NotImplementedException("TODO: implement for R" + A.Count);
+                default:
+                    // A line segment probably won't block a ray in R3 or higher, so give it some thickness.
+                    throw new NotImplementedException("TODO: implement for R" + A.Count);
+            }
         }
 
         public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)
         {
-            throw new NotImplementedException("Return a single point if the slice intersects, otherwise an empty set.");
+            throw new NotImplementedException("TODO: Return a single point if the slice intersects, otherwise an empty set.");
         }
     }
 }

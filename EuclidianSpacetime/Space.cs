@@ -1,4 +1,5 @@
 ﻿using EuclidianSpacetime.Entities;
+using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,9 +7,14 @@ namespace EuclidianSpacetime
 {
     public interface ISpace
     {
+        /// <summary>
+        /// The total number of space and/or time dimensions
+        /// </summary>
+        int N { get; }
         IReadOnlyList<IEntity> Entities { get; }
         public void AddEntity(IEntity Entity);
-        ARGB Sample(ISamplePoint samplePoint);
+        ARGB32 Sample(ISamplePoint samplePoint);
+        BoundingBox ComputeBoundingBox();
     }
 
     public class Space : ISpace
@@ -28,9 +34,37 @@ namespace EuclidianSpacetime
             _entities.Add(entity);
         }
 
-        public ARGB Sample(ISamplePoint samplePoint)
+        public ARGB32 Sample(ISamplePoint samplePoint)
         {
-            return Entities.Select(e => e.SampleColor(samplePoint)).FirstOrDefault(c => c.A > 0);
+            var sampledEntity = Entities.FirstOrDefault(e => e.ContainsSample(samplePoint));
+            var result = sampledEntity?.Texture.ColorAt(samplePoint.P) ?? ARGB32.TransparentBlack;
+            return result;
+        }
+
+        public BoundingBox ComputeBoundingBox()
+        {
+            var any = false;
+            var min = Vector<double>.Build.Dense(N);
+            var max = Vector<double>.Build.Dense(N);
+            foreach (var entity in Entities)
+            {
+                var entityBB = entity.ComputeBoundingBox();
+                for (var i = 0; i < N; i++)
+                {
+                    var entityMin = entityBB.Min[i];
+                    var entityMax = entityBB.Max[i];
+                    if (!any || entityMin < min[i])
+                    {
+                        min[i] = entityMin;
+                    }
+                    if (!any || entityMax > max[i])
+                    {
+                        max[i] = entityMax;
+                    }
+                }
+                any = true;
+            }
+            return new BoundingBox(min, max);
         }
     }
 }

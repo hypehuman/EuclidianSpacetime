@@ -20,7 +20,7 @@ namespace EuclidianSpacetime.Textures
             B = b;
         }
 
-        public ARGB ColorAt(Vector<double> position)
+        public ARGB32 ColorAt(Vector<double> position)
         {
             var bMinA = B - A;
             var posMinA = position - A;

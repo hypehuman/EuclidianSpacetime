@@ -4,7 +4,7 @@ namespace EuclidianSpacetime.Textures
 {
     public interface ISimpleTexture : ITexture
     {
-        ARGB Color { get; }
-        ARGB ITexture.ColorAt(Vector<double> position) => Color;
+        ARGB32 Color { get; }
+        ARGB32 ITexture.ColorAt(Vector<double> position) => Color;
     }
 }

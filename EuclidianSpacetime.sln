@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidianSpacetime", "EuclidianSpacetime\EuclidianSpacetime.csproj", "{F245CDEF-C0E0-40A0-B2BB-A94B73225E11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EuclidianSpacetime", "EuclidianSpacetime\EuclidianSpacetime.csproj", "{F245CDEF-C0E0-40A0-B2BB-A94B73225E11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidianSpacetimeConsole", "EuclidianSpacetimeConsole\EuclidianSpacetimeConsole.csproj", "{C501402D-81DC-4556-91FC-6DD1A0D5FA82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EuclidianSpacetimeConsole", "EuclidianSpacetimeConsole\EuclidianSpacetimeConsole.csproj", "{C501402D-81DC-4556-91FC-6DD1A0D5FA82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{7A8CE21F-E6E2-4F7D-AE2D-5A5938EF0C75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C501402D-81DC-4556-91FC-6DD1A0D5FA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C501402D-81DC-4556-91FC-6DD1A0D5FA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C501402D-81DC-4556-91FC-6DD1A0D5FA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A8CE21F-E6E2-4F7D-AE2D-5A5938EF0C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A8CE21F-E6E2-4F7D-AE2D-5A5938EF0C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A8CE21F-E6E2-4F7D-AE2D-5A5938EF0C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A8CE21F-E6E2-4F7D-AE2D-5A5938EF0C75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

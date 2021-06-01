@@ -75,5 +75,18 @@ namespace EuclidianSpacetime.Entities
             var pToClosest = P - closestPointOnRayToP;
             return pToClosest.L2Norm();
         }
+
+        public bool ContainsSample(ISamplePoint samplePoint)
+        {
+            if (P.Count == 0)
+            {
+                return true;
+            }
+
+            // A point probably won't intersect with a point in R1 or higher, so give it some thickness.
+            var sp = P - samplePoint.P;
+            var distance = sp.L2Norm();
+            return distance <= samplePoint.ThicknessOfInfinitesimal;
+        }
     }
 }

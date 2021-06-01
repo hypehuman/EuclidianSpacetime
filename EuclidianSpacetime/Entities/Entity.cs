@@ -18,5 +18,7 @@ namespace EuclidianSpacetime.Entities
             var intersection = ComputeIntersection(ray);
             return intersection == null ? ARGB.TransparentBlack : Texture.ColorAt(intersection);
         }
+        bool ContainsSample(ISamplePoint samplePoint);
+        ARGB SampleColor(ISamplePoint samplePoint) => ContainsSample(samplePoint) ? Texture.ColorAt(samplePoint.P) : default;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EuclidianSpacetime.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EuclidianSpacetime
 {
@@ -7,6 +8,7 @@ namespace EuclidianSpacetime
     {
         IReadOnlyList<IEntity> Entities { get; }
         public void AddEntity(IEntity Entity);
+        ARGB Sample(ISamplePoint samplePoint);
     }
 
     public class Space : ISpace
@@ -24,6 +26,11 @@ namespace EuclidianSpacetime
         public void AddEntity(IEntity entity)
         {
             _entities.Add(entity);
+        }
+
+        public ARGB Sample(ISamplePoint samplePoint)
+        {
+            return Entities.Select(e => e.SampleColor(samplePoint)).FirstOrDefault(c => c.A > 0);
         }
     }
 }

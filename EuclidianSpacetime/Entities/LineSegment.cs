@@ -67,5 +67,22 @@ namespace EuclidianSpacetime.Entities
         {
             throw new NotImplementedException("TODO: Return a single point if the slice intersects, otherwise an empty set.");
         }
+
+        public bool ContainsSample(ISamplePoint samplePoint)
+        {
+            switch (A.Count)
+            {
+                case 1:
+                    var a = A[0];
+                    var b = B[0];
+                    var s = samplePoint.P[0];
+                    return a <= s && s <= b || b <= s && s <= a;
+                case 2:
+                    // A line probably won't intersect with a point in R2 or higher, so give it some thickness.
+                    throw new NotImplementedException("TODO: implement for R" + A.Count);
+                default:
+                    throw new NotImplementedException("TODO: implement for R" + A.Count);
+            }
+        }
     }
 }

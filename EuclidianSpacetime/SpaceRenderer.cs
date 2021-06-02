@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using static EuclidianSpacetime.Utilities;
@@ -11,21 +10,21 @@ namespace EuclidianSpacetime
         /// <summary>
         /// resulting lazy enumerable supports parallelization
         /// </summary>
-        public static IEnumerable<(Vector<int>, ARGB32)> Render(ISpace space, double samplesPerLinearUnit, double thicknessOfInfinitesimal, BoundingBox? regionIn = null)
+        public static IEnumerable<(int[], ARGB32)> Render(ISpace space, double samplesPerLinearUnit, double thicknessOfInfinitesimal, BoundingBox? regionIn = null)
         {
             var n = space.N;
             if (n == 0)
             {
-                var sample = (EmptyIntVector, space.Sample(new SamplePoint(EmptyDoubleVector, 0)));
+                var sample = (Array.Empty<int>(), space.Sample(new SamplePoint(EmptyVectorDD, 0)));
                 return new[] { sample };
             }
 
             var region = regionIn ?? space.ComputeBoundingBox();
             var dimensionInfo = Enumerable.Range(0, n).Select(d => GetDimensionInfo(d, samplesPerLinearUnit, region)).ToList();
-            var samplePoints = GetSamplePoints(dimensionInfo);
-            var result = samplePoints.Select(sampleID =>
+            var sampleIDs = GetSampleIDs(dimensionInfo);
+            var result = sampleIDs.Select(sampleID =>
             {
-                var sampleCoords = Vector<double>.B;
+                var sampleCoords = sampleID.Select((i, xi) => xi * samplesPerLinearUnit + dimensionInfo[i].Offset).ToVectorDD();
                 var sample = space.Sample(new SamplePoint(sampleCoords, thicknessOfInfinitesimal));
                 return (sampleID, sample);
             });
@@ -47,18 +46,24 @@ namespace EuclidianSpacetime
             return new DimensionInfo(numSamples, margin);
         }
 
-        private static IEnumerable<Vector<int>> GetSamplePoints(IReadOnlyList<DimensionInfo> dimensionInfo)
+        private static IEnumerable<int[]> GetSampleIDs(IReadOnlyList<DimensionInfo> dimensionInfo)
         {
             var n = dimensionInfo.Count;
-            var sampleIndexArray = new int[n];
+            var counter = new int[n];
             while (true)
             {
-                sampleIndexArray[n - 1]++;
+                yield return counter.FastClone();
+                counter[n - 1]++;
                 for (var i = n - 1; i >= 0; i--)
                 {
-                    if ()
+                    if (i == 0)
+                    {
+                        yield break;
+                    }
+
+                    counter[i] = 0;
+                    counter[i - 1]++;
                 }
-                yield return Vector<int>.Build.DenseOfArray(sampleIndexArray);
             }
         }
 

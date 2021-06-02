@@ -18,6 +18,11 @@ namespace EuclidianSpacetime
             return Vector<double>.Build.DenseOfArray(values);
         }
 
+        public static Vector<double> ToVectorDD(this double value)
+        {
+            return Vector<double>.Build.DenseOfEnumerable(new[] { value });
+        }
+
         public static int[] FastClone(this int[] array)
         {
             var result = new int[array.Length];

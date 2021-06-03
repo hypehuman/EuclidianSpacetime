@@ -17,6 +17,7 @@ namespace EuclidianSpacetime.Entities
         public Vector<double> A { get; }
         public Vector<double> B { get; }
         public ITexture Texture { get; }
+        public int N => A.Count;
 
         public LineSegment(Vector<double> a, Vector<double> b, ITexture texture)
         {
@@ -39,7 +40,7 @@ namespace EuclidianSpacetime.Entities
 
         public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)
         {
-            return ComputeBoundingBox(timeArrow.TransitionMatrix * A, timeArrow.TransitionMatrix * B);
+            return ComputeBoundingBox(timeArrow.Convert(A), timeArrow.Convert(B));
         }
 
         public Vector<double>? ComputeIntersection(ISightRay ray)
@@ -75,7 +76,33 @@ namespace EuclidianSpacetime.Entities
 
         public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)
         {
-            throw new NotImplementedException("TODO: Return a single point if the slice intersects, otherwise an empty set.");
+            var a = slice.Arrow.Convert(A);
+            var b = slice.Arrow.Convert(B);
+            var aT = a.Last();
+            var bT = b.Last();
+            var sT = slice.T;
+
+            var intersectsThisSlice = aT <= sT && sT <= bT || bT <= sT && sT <= aT;
+            if (!intersectsThisSlice)
+            {
+                // Segment doesn't intersect this slice at all
+                yield break;
+            }
+
+            var abT = bT - aT;
+            if (abT == 0)
+            {
+                // Segment is completely within this slice
+                yield return new LineSegment(a.Take(N - 1).ToVectorDD(), b.Take(N - 1).ToVectorDD(), new SlicedTexture(Texture, slice));
+            }
+
+            var ab = b - a;
+            var asT = sT - aT;
+            var displacement = ab / asT;
+            var slicedPoint = a + displacement;
+            // slicedPoint[t] should be sT
+            var color = Texture.ColorAt(slicedPoint);
+            yield return new Point(slicedPoint.Take(N - 1).ToVectorDD(), new SimpleTexture(color));
         }
 
         public bool ContainsSample(ISamplePoint samplePoint)

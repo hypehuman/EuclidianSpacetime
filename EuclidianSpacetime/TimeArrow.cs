@@ -11,25 +11,29 @@ namespace EuclidianSpacetime
     /// </summary>
     public interface ITimeArrow
     {
-        /// <summary>
-        /// the change-of-basis matrix (also called transition matrix)
-        /// The last dimension is timelike.
-        /// </summary>
-        Matrix<double> TransitionMatrix { get; }
+        Vector<double> Convert(Vector<double> v);
+        Vector<double> ConvertBack(Vector<double> v);
     }
 
     public class TimeArrow : ITimeArrow
     {
-        public Matrix<double> TransitionMatrix { get; }
+        private Matrix<double> BasisUnitColumns { get; }
 
-        private TimeArrow(Matrix<double> transitionMatrix)
+        /// <summary>
+        /// the change-of-basis matrix (also called transition matrix)
+        /// The last dimension is timelike.
+        /// </summary>
+        private Matrix<double> TransitionMatrix { get; }
+
+        private TimeArrow(Matrix<double> basisUnitColumns)
         {
-            TransitionMatrix = transitionMatrix;
+            BasisUnitColumns = basisUnitColumns;
+            TransitionMatrix = BasisUnitColumns.Inverse();
         }
 
-        public static ITimeArrow FromBasis(Matrix<double> basis)
+        public static ITimeArrow FromBasis(Matrix<double> basisUnitColumns)
         {
-            return new TimeArrow(basis.Inverse());
+            return new TimeArrow(basisUnitColumns);
         }
 
         public static ITimeArrow Default(int n)
@@ -41,6 +45,16 @@ namespace EuclidianSpacetime
         {
             throw new NotImplementedException("Haven't implemented rotations around ");
             //return FromBasis(
+        }
+
+        public Vector<double> Convert(Vector<double> v)
+        {
+            return TransitionMatrix * v;
+        }
+
+        public Vector<double> ConvertBack(Vector<double> v)
+        {
+            return BasisUnitColumns * v;
         }
     }
 }

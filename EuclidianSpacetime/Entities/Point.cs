@@ -33,7 +33,7 @@ namespace EuclidianSpacetime.Entities
 
         public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)
         {
-            return ComputeBoundingBox(timeArrow.TransitionMatrix * P);
+            return ComputeBoundingBox(timeArrow.Convert(P));
         }
 
         public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)

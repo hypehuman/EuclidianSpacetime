@@ -75,5 +75,23 @@ namespace Tests
             Assert.AreEqual(0, colors[expectedNumSamples / 2].A); // between the two points should be transparent
             Assert.AreEqual(c2, colors.Last()); // the rightmost sample should be at the second point
         }
+
+        [TestMethod]
+        public void RenderSegmentInR1()
+        {
+            var a = 0.16796875;
+            var b = -0.8828125;
+            var c1 = new ARGB32(139, 72, 119, 136);
+            ISpace space = new Space(1);
+            space.AddEntity(new LineSegment(a.ToVectorDD(), b.ToVectorDD(), new SimpleTexture(c1)));
+            ARGB32 sample(double x) => space.Sample(new SamplePoint(x.ToVectorDD(), 0.25));
+            Assert.AreEqual(0, sample(-1).A);
+            Assert.AreEqual(0, sample(b - 1d / 256).A); // Lines in R1 are solid objects, so there should be no thickening.
+            Assert.AreEqual(c1, sample(b));
+            Assert.AreEqual(c1, sample(0));
+            Assert.AreEqual(c1, sample(a));
+            Assert.AreEqual(0, sample(a + 1d / 256).A);
+            Assert.AreEqual(0, sample(1).A);
+        }
     }
 }

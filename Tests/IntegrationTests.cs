@@ -4,7 +4,6 @@ using EuclidianSpacetime.Rendering;
 using EuclidianSpacetime.Textures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using static EuclidianSpacetime.Utilities;
 
@@ -55,14 +54,20 @@ namespace Tests
             var rendered = SpaceRenderer.Render(space, 0.25, di).ToList();
             var expectedNumSamples = di[0].NumSamples;
             Assert.AreEqual(expectedNumSamples, rendered.Count);
-            var idValues = new HashSet<int>();
+            var idValues = new bool[expectedNumSamples];
             var colors = new ARGB32[rendered.Count];
             foreach ((var id, var color) in rendered)
             {
                 Assert.AreEqual(1, id.Length);
                 var idVal = id[0];
-                Assert.IsTrue(idVal < expectedNumSamples, "Sample index is too high");
-                Assert.IsTrue(idValues.Add(idVal), "Sample indexes are not unique");
+                try
+                {
+                    Assert.IsFalse(idValues[idVal], "Sample indexes are not unique");
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    Assert.Fail("Sample index is out of range");
+                }
                 colors[id[0]] = color;
             }
             Assert.AreEqual(c1, colors[0]); // the leftmost sample should be at the first point

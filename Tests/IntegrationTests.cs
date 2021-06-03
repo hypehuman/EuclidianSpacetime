@@ -104,10 +104,11 @@ namespace Tests
             ISpacetime st = new Spacetime(1, 1);
             st.AddEntity(new LineSegment(a.ToVectorDD(), b.ToVectorDD(), new SimpleTexture(c1)));
             var arrow = TimeArrow.Default(1);
-            var (di, _) = TimeRenderer.GetDimensionInfo(st, arrow, 1d / 8);
+            var di = TimeRenderer.GetDimensionInfo(new BoundingBox(-1d.ToVectorDD(), 1d.ToVectorDD()), 1d / 8);
             var spaces = TimeRenderer.Render(st, arrow, di).ToList();
-            Assert.AreEqual(11, spaces.Count);
-            Assert.Inconclusive("test more things");
+            Assert.AreEqual(16, spaces.Count);
+            var points = spaces.Select(st => ((IPoint)st.Entities.FirstOrDefault())).Select(p => p == null ? -1 : p.P.Count).ToList();
+            Assert.Inconclusive(string.Join(",", points));
         }
     }
 }

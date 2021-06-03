@@ -33,5 +33,10 @@
         }
 
         public static implicit operator ARGB32(RGB rgb) => new(rgb);
+
+        public override string ToString()
+        {
+            return $"{A},{R},{G},{B}";
+        }
     }
 }

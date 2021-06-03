@@ -37,7 +37,7 @@ namespace EuclidianSpacetime.Rendering
             {
                 yield return counter.FastClone();
                 counter[n - 1]++;
-                for (var i = n - 1; i >= 0; i--)
+                for (var i = n - 1; counter[i] >= dimensionInfo[i].NumSamples; i--)
                 {
                     if (i == 0)
                     {
@@ -73,9 +73,10 @@ namespace EuclidianSpacetime.Rendering
             {
                 return new DimensionInfo(1, (min + max) / 2, samplesPerLinearUnit);
             }
-            var sampledSize = (numSamples - 1) * samplesPerLinearUnit; // the distance between the first and last samples
+            var sampledSize = (numSamples - 1) / samplesPerLinearUnit; // the distance between the first and last samples
             var margin = (regionSize - sampledSize) / 2;
-            return new DimensionInfo(numSamples, margin, samplesPerLinearUnit);
+            var offset = min + margin;
+            return new DimensionInfo(numSamples, offset, samplesPerLinearUnit);
         }
     }
 }

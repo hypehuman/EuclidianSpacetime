@@ -59,16 +59,16 @@ namespace Tests
             var colors = new ARGB32[rendered.Count];
             foreach ((var id, var color) in rendered)
             {
-                Assert.Equals(1, id.Length);
+                Assert.AreEqual(1, id.Length);
                 var idVal = id[0];
                 Assert.IsTrue(idVal < expectedNumSamples, "Sample index is too high");
                 Assert.IsTrue(idValues.Add(idVal), "Sample indexes are not unique");
                 colors[id[0]] = color;
             }
-            Assert.Equals(colors[0], c1);
-            Assert.Equals(colors[1], c1); // point should be more than one sample thick
-            Assert.Equals(colors.Last(), c2);
-            Assert.Equals(colors[expectedNumSamples / 2].A, 0); // between the two points should be transparent
+            Assert.AreEqual(c1, colors[0]); // the leftmost sample should be at the first point
+            Assert.AreEqual(c1, colors[1]); // point should be more than one sample thick
+            Assert.AreEqual(0, colors[expectedNumSamples / 2].A); // between the two points should be transparent
+            Assert.AreEqual(c2, colors.Last()); // the rightmost sample should be at the second point
         }
     }
 }

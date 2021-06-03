@@ -57,7 +57,7 @@ namespace EuclidianSpacetime.Entities
                 default:
                     // A point probably won't block a ray in R2 or higher, so give it some thickness.
                     var distance = DistanceFromRay(ray);
-                    return distance <= ray.ThicknessOfInfinitesimal;
+                    return distance <= ray.RadiusOfInfinitesimal;
             }
         }
 
@@ -86,7 +86,7 @@ namespace EuclidianSpacetime.Entities
             // A point probably won't intersect with a point in R1 or higher, so give it some thickness.
             var sp = P - samplePoint.P;
             var distance = sp.L2Norm();
-            return distance <= samplePoint.ThicknessOfInfinitesimal;
+            return distance <= samplePoint.RadiusOfInfinitesimal;
         }
     }
 }

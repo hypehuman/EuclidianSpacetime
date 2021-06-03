@@ -10,7 +10,7 @@ namespace EuclidianSpacetime.Rendering
         /// <summary>
         /// resulting lazy enumerable supports parallelization
         /// </summary>
-        public static IEnumerable<(int[], ARGB32)> Render(ISpace space, double thicknessOfInfinitesimal, IReadOnlyList<DimensionInfo> dimensionInfo)
+        public static IEnumerable<(int[], ARGB32)> Render(ISpace space, double radiusOfInfinitesimal, IReadOnlyList<DimensionInfo> dimensionInfo)
         {
             var n = space.N;
             if (n == 0)
@@ -23,7 +23,7 @@ namespace EuclidianSpacetime.Rendering
             var result = sampleIDs.Select(sampleID =>
             {
                 var sampleCoords = dimensionInfo.Zip(sampleID, (di, xi) => di.GetSampleCoord(xi)).ToVectorDD();
-                var sample = space.Sample(new SamplePoint(sampleCoords, thicknessOfInfinitesimal));
+                var sample = space.Sample(new SamplePoint(sampleCoords, radiusOfInfinitesimal));
                 return (sampleID, sample);
             });
             return result;

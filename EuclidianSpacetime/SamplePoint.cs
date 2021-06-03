@@ -5,18 +5,18 @@ namespace EuclidianSpacetime
     public interface ISamplePoint
     {
         Vector<double> P { get; }
-        double ThicknessOfInfinitesimal { get; }
+        double RadiusOfInfinitesimal { get; }
     }
 
     public class SamplePoint : ISamplePoint
     {
         public Vector<double> P { get; }
-        public double ThicknessOfInfinitesimal { get; }
+        public double RadiusOfInfinitesimal { get; }
 
-        public SamplePoint(Vector<double> p, double thicknessOfInfinitesimal)
+        public SamplePoint(Vector<double> p, double radiusOfInfinitesimal)
         {
             P = p;
-            ThicknessOfInfinitesimal = thicknessOfInfinitesimal;
+            RadiusOfInfinitesimal = radiusOfInfinitesimal;
         }
     }
 }

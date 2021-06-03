@@ -6,7 +6,7 @@ namespace EuclidianSpacetime
     {
         Vector<double> A { get; }
         Vector<double> B { get; }
-        double ThicknessOfInfinitesimal { get; }
+        double RadiusOfInfinitesimal { get; }
         Vector<double> AB { get; }
         Vector<double> ABUnit { get; }
     }
@@ -15,15 +15,15 @@ namespace EuclidianSpacetime
     {
         public Vector<double> A { get; }
         public Vector<double> B { get; }
-        public double ThicknessOfInfinitesimal { get; }
+        public double RadiusOfInfinitesimal { get; }
         public Vector<double> AB { get; }
         public Vector<double> ABUnit { get; }
 
-        public SightRay(Vector<double> a, Vector<double> b, double thicknessOfInfinitesimal)
+        public SightRay(Vector<double> a, Vector<double> b, double radiusOfInfinitesimal)
         {
             A = a;
             B = b;
-            ThicknessOfInfinitesimal = thicknessOfInfinitesimal;
+            RadiusOfInfinitesimal = radiusOfInfinitesimal;
             AB = B - A;
             ABUnit = AB / AB.L2Norm();
         }

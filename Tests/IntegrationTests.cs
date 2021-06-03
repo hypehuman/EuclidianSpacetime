@@ -5,6 +5,7 @@ using EuclidianSpacetime.Textures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using static EuclidianSpacetime.Utilities;
 
 namespace Tests
@@ -51,13 +52,12 @@ namespace Tests
             (var di, var bb) = SpaceRenderer.GetDimensionInfo(space, 8);
             Assert.AreEqual(1, di.Count);
             Assert.AreEqual(bb, new BoundingBox(x1.ToVectorDD(), x2.ToVectorDD()));
-            var rendered = SpaceRenderer.Render(space, 0.25, di).ToList();
             var expectedNumSamples = di[0].NumSamples;
-            Assert.AreEqual(expectedNumSamples, rendered.Count);
             var idValues = new bool[expectedNumSamples];
-            var colors = new ARGB32[rendered.Count];
-            foreach ((var id, var color) in rendered)
+            var colors = new ARGB32[expectedNumSamples];
+            Parallel.ForEach(SpaceRenderer.Render(space, 0.25, di), x =>
             {
+                (var id, var color) = x;
                 Assert.AreEqual(1, id.Length);
                 var idVal = id[0];
                 try
@@ -69,7 +69,7 @@ namespace Tests
                     Assert.Fail("Sample index is out of range");
                 }
                 colors[id[0]] = color;
-            }
+            });
             Assert.AreEqual(c1, colors[0]); // the leftmost sample should be at the first point
             Assert.AreEqual(c1, colors[1]); // point should be more than one sample thick
             Assert.AreEqual(0, colors[expectedNumSamples / 2].A); // between the two points should be transparent

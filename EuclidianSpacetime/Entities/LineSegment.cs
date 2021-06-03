@@ -25,11 +25,21 @@ namespace EuclidianSpacetime.Entities
             Texture = texture;
         }
 
+        public static BoundingBox ComputeBoundingBox(Vector<double> a, Vector<double> b)
+        {
+            var min = a.Zip(b, Math.Min).ToVectorDD();
+            var max = a.Zip(b, Math.Max).ToVectorDD();
+            return new BoundingBox(min, max);
+        }
+
         public BoundingBox ComputeBoundingBox()
         {
-            var min = A.Zip(B, Math.Min).ToVectorDD();
-            var max = A.Zip(B, Math.Max).ToVectorDD();
-            return new BoundingBox(min, max);
+            return ComputeBoundingBox(A, B);
+        }
+
+        public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)
+        {
+            return ComputeBoundingBox(timeArrow.TransitionMatrix * A, timeArrow.TransitionMatrix * B);
         }
 
         public Vector<double>? ComputeIntersection(ISightRay ray)

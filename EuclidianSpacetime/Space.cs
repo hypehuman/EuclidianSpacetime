@@ -1,5 +1,4 @@
 ﻿using EuclidianSpacetime.Entities;
-using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,28 +42,7 @@ namespace EuclidianSpacetime
 
         public BoundingBox ComputeBoundingBox()
         {
-            var any = false;
-            var min = Vector<double>.Build.Dense(N);
-            var max = Vector<double>.Build.Dense(N);
-            foreach (var entity in Entities)
-            {
-                var entityBB = entity.ComputeBoundingBox();
-                for (var i = 0; i < N; i++)
-                {
-                    var entityMin = entityBB.Min[i];
-                    var entityMax = entityBB.Max[i];
-                    if (!any || entityMin < min[i])
-                    {
-                        min[i] = entityMin;
-                    }
-                    if (!any || entityMax > max[i])
-                    {
-                        max[i] = entityMax;
-                    }
-                }
-                any = true;
-            }
-            return new BoundingBox(min, max);
+            return BoundingBox.Union(N, Entities.Select(e => e.ComputeBoundingBox()));
         }
     }
 }

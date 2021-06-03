@@ -50,33 +50,36 @@ namespace EuclidianSpacetime.Rendering
             }
         }
 
-        public static IReadOnlyList<DimensionInfo> GetDimensionInfo(int n, BoundingBox region, double samplesPerLinearUnit)
+        /// <param name="linearUnitsPerSample">the distance between samples, i.e., 1/resolution</param>
+        public static IReadOnlyList<DimensionInfo> GetDimensionInfo(BoundingBox region, double linearUnitsPerSample)
         {
-            var dimensionInfo = Enumerable.Range(0, n).Select(d => GetDimensionInfo(d, samplesPerLinearUnit, region)).ToList();
+            var dimensionInfo = Enumerable.Range(0, region.N).Select(d => GetDimensionInfo(d, linearUnitsPerSample, region)).ToList();
             return dimensionInfo;
         }
 
-        public static (IReadOnlyList<DimensionInfo>, BoundingBox) GetDimensionInfo(ISpace space, double samplesPerLinearUnit)
+        /// <param name="linearUnitsPerSample">the distance between samples, i.e., 1/resolution</param>
+        public static (IReadOnlyList<DimensionInfo>, BoundingBox) GetDimensionInfo(ISpace space, double linearUnitsPerSample)
         {
             var region = space.ComputeBoundingBox();
-            var dimensionInfo = GetDimensionInfo(space.N, region, samplesPerLinearUnit);
+            var dimensionInfo = GetDimensionInfo(region, linearUnitsPerSample);
             return (dimensionInfo, region);
         }
 
-        private static DimensionInfo GetDimensionInfo(int dimension, double samplesPerLinearUnit, BoundingBox region)
+        /// <param name="linearUnitsPerSample">the distance between samples, i.e., 1/resolution</param>
+        public static DimensionInfo GetDimensionInfo(int dimension, double linearUnitsPerSample, BoundingBox region)
         {
             var min = region.Min[dimension];
             var max = region.Max[dimension];
             var regionSize = max - min;
-            var numSamples = (int)Math.Floor(regionSize * samplesPerLinearUnit);
+            var numSamples = (int)Math.Floor(regionSize / linearUnitsPerSample);
             if (numSamples <= 0)
             {
-                return new DimensionInfo(1, (min + max) / 2, samplesPerLinearUnit);
+                return new DimensionInfo(1, (min + max) / 2, linearUnitsPerSample);
             }
-            var sampledSize = (numSamples - 1) / samplesPerLinearUnit; // the distance between the first and last samples
+            var sampledSize = (numSamples - 1) * linearUnitsPerSample; // the distance between the first and last samples
             var margin = (regionSize - sampledSize) / 2;
             var offset = min + margin;
-            return new DimensionInfo(numSamples, offset, samplesPerLinearUnit);
+            return new DimensionInfo(numSamples, offset, linearUnitsPerSample);
         }
     }
 }

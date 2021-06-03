@@ -21,9 +21,19 @@ namespace EuclidianSpacetime.Entities
             Texture = texture;
         }
 
+        public static BoundingBox ComputeBoundingBox(Vector<double> p)
+        {
+            return new BoundingBox(p, p);
+        }
+
         public BoundingBox ComputeBoundingBox()
         {
-            return new BoundingBox(P, P);
+            return ComputeBoundingBox(P);
+        }
+
+        public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)
+        {
+            return ComputeBoundingBox(timeArrow.TransitionMatrix * P);
         }
 
         public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)

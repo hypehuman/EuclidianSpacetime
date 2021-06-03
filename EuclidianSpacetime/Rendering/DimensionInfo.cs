@@ -4,18 +4,22 @@
     {
         public int NumSamples { get; }
         public double Offset { get; }
-        public double SamplesPerLinearUnit { get; }
+        /// <summary>
+        /// the distance between samples, i.e., 1/resolution
+        /// </summary>
+        public double LinearUnitsPerSample { get; }
 
-        public DimensionInfo(int numSamples, double offset, double samplesPerLinearUnit)
+        /// <param name="linearUnitsPerSample">the distance between samples, i.e., 1/resolution</param>
+        public DimensionInfo(int numSamples, double offset, double linearUnitsPerSample)
         {
             NumSamples = numSamples;
             Offset = offset;
-            SamplesPerLinearUnit = samplesPerLinearUnit;
+            LinearUnitsPerSample = linearUnitsPerSample;
         }
 
         public double GetSampleCoord(int idCoord)
         {
-            return Offset + idCoord / SamplesPerLinearUnit;
+            return Offset + idCoord * LinearUnitsPerSample;
         }
     }
 }

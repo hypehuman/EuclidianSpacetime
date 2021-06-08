@@ -4,8 +4,8 @@ using System;
 namespace EuclidianSpacetime
 {
     /// <summary>
-    /// The default "arrow of time" is a unit vector pointing in the direction of the N-1th axis.
-    /// In other words, the last coordinate is the timelike dimension, and the other coordinates are spacelike.
+    /// The default "arrow of time" is a unit vector pointing in the direction of the 0th axis.
+    /// In other words, the first coordinate is the timelike dimension, and the other coordinates are spacelike.
     /// Any arbitrary arrow of time is defined by rotating spacetime about a given vector by a given angle, and then travelling through it with the default arrow of time.
     /// Essentially, this defines a new orthonormal basis for the spacetime.
     /// </summary>

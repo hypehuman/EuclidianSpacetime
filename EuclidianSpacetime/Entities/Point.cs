@@ -1,7 +1,5 @@
 ﻿using EuclidianSpacetime.Textures;
 using MathNet.Numerics.LinearAlgebra;
-using System;
-using System.Collections.Generic;
 
 namespace EuclidianSpacetime.Entities
 {
@@ -34,18 +32,6 @@ namespace EuclidianSpacetime.Entities
         public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)
         {
             return ComputeBoundingBox(timeArrow.Convert(P));
-        }
-
-        public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)
-        {
-            switch (P.Count)
-            {
-                case 0:
-                    throw new ArgumentException("Cannot slice a dimensionless entity");
-                default:
-                    throw new NotImplementedException();
-            }
-            throw new NotImplementedException();
         }
 
         public Vector<double>? ComputeIntersection(ISightRay ray)

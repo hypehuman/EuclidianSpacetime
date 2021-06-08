@@ -1,7 +1,6 @@
 ﻿using EuclidianSpacetime.Textures;
 using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EuclidianSpacetime.Entities
@@ -72,37 +71,6 @@ namespace EuclidianSpacetime.Entities
                     // A line segment probably won't block a ray in R3 or higher, so give it some thickness.
                     throw new NotImplementedException("TODO: implement for R" + A.Count);
             }
-        }
-
-        public IEnumerable<IEntity> ComputeCrossSection(ITimeSlice slice)
-        {
-            var a = slice.Arrow.Convert(A);
-            var b = slice.Arrow.Convert(B);
-            var aT = a.Last();
-            var bT = b.Last();
-            var sT = slice.T;
-
-            var intersectsThisSlice = aT <= sT && sT <= bT || bT <= sT && sT <= aT;
-            if (!intersectsThisSlice)
-            {
-                // Segment doesn't intersect this slice at all
-                yield break;
-            }
-
-            var abT = bT - aT;
-            if (abT == 0)
-            {
-                // Segment is completely within this slice
-                yield return new LineSegment(a.Take(N - 1).ToVectorDD(), b.Take(N - 1).ToVectorDD(), new SlicedTexture(Texture, slice));
-            }
-
-            var ab = b - a;
-            var asT = sT - aT;
-            var displacement = ab / asT;
-            var slicedPoint = a + displacement;
-            // slicedPoint[t] should be sT
-            var color = Texture.ColorAt(slicedPoint);
-            yield return new Point(slicedPoint.Take(N - 1).ToVectorDD(), new SimpleTexture(color));
         }
 
         public bool ContainsSample(ISamplePoint samplePoint)

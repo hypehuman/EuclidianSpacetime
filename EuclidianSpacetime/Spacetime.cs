@@ -5,10 +5,6 @@ namespace EuclidianSpacetime
     public interface ISpacetime : ISpace
     {
         double LinearUnitsPerSecond { get; }
-        /// <summary>
-        /// Returns a snapshot of space at the given time.
-        /// </summary>
-        ISpace ComputeCrossSection(ITimeSlice timeSlice);
         BoundingBox ComputeBoundingBox(ITimeArrow timeArrow);
     }
 
@@ -23,16 +19,6 @@ namespace EuclidianSpacetime
             : base(n)
         {
             LinearUnitsPerSecond = linearUnitsPerSecond;
-        }
-
-        public ISpace ComputeCrossSection(ITimeSlice slice)
-        {
-            ISpace space = new Space(N - 1);
-            foreach (var lowerEntity in Entities.SelectMany(e => e.ComputeCrossSection(slice)))
-            {
-                space.AddEntity(lowerEntity);
-            }
-            return space;
         }
 
         public BoundingBox ComputeBoundingBox(ITimeArrow timeArrow)

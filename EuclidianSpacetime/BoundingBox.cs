@@ -3,17 +3,9 @@ using System.Collections.Generic;
 
 namespace EuclidianSpacetime
 {
-    public struct BoundingBox
+    public readonly record struct BoundingBox(Vector<double> Min, Vector<double> Max)
     {
-        public Vector<double> Min { get; }
-        public Vector<double> Max { get; }
         public int N => Min.Count;
-
-        public BoundingBox(Vector<double> min, Vector<double> max) : this()
-        {
-            Min = min;
-            Max = max;
-        }
 
         public static BoundingBox Union(int n, IEnumerable<BoundingBox> boundingBoxes)
         {
